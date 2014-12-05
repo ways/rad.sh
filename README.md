@@ -4,6 +4,7 @@ rad.sh - Radiation report
 Fetch data from radnet and display an overview for Norway
 
 Sample output:
+```
 
 $ ./rad.sh
 
@@ -17,3 +18,5 @@ $ ./rad.sh
   Trondheim      0.093 µSv/h
   Bodø           0.103 µSv/h
   Vardø          0.075 µSv/h
+
+```
