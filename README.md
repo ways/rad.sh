@@ -1,7 +1,7 @@
 rad.sh - Radiation report
 =========================
 
-Fetch data from radnet and display an overview for Norway
+Fetch data from radnett.nrpa.no and display an overview for Norway
 
 Sample output:
 ```
