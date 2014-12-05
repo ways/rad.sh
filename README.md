@@ -1,4 +1,4 @@
-rad.sh
-======
+rad.sh - Radiation report
+=========================
 
-Radiation report
+Fetch data from radnet and display an overview for Norway
