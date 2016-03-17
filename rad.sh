@@ -2,14 +2,17 @@
 
 # Data from http://radnett.nrpa.no. Must be cached for 30 minutes.
 
+#cities=( Halden* Kjeller* Oslo Trondheim Bergen )
+cities=( Halden* Kjeller* Oslo Trondheim Bergen Bodø Vardø )
+
 URL='http://radnett.nrpa.no/radnett.xml'
 DIR='/tmp/rad'
 FILE="${DIR}/radnett.xml"
 bold="\033[1m"
 normal="\033[0m"
 stale_minutes=60
-bold_limit='0.099'
-danger_limit='0.110'
+bold_limit='0.120'
+danger_limit='2.000'
 reactor_symbol='\u2622 '
 danger_symbol='\u2620 '
 
@@ -39,9 +42,6 @@ echo "  --------------------------"
 
 [[ ! -s $FILE ]] && { echo "No data!"; exit 1; }
 
-cities=( Halden* Kjeller* Oslo Trondheim Bergen )
-#cities=( Halden* Kjeller* Oslo Trondheim Bergen Bodø Vardø )
-
 for city in ${cities[@]}; do
   # Check if city contains a reactor
   reactor='  '
@@ -53,6 +53,12 @@ for city in ${cities[@]}; do
 
   # Parse citys data
   line=$( grep -si -R3 ${city} $FILE |tail -n1|cut -d '>' -f 2|cut -d '<' -f 1 )
+  [[ "x${line}" == "x" ]] && \
+  {
+    printf "%-16b" "  ${city}"
+    echo -e "   no data"
+    continue;
+  }
 
   # Check if value is abnormally high
   danger=' '
