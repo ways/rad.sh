@@ -2,8 +2,9 @@
 
 # Data from http://radnett.nrpa.no. Must be cached for 30 minutes.
 
+# List of cities to show. City must exist in source file from radnett. Cities with a trailing asterisk will be marked as having a reactor.
 #cities=( Halden* Kjeller* Oslo Trondheim Bergen )
-cities=( Halden* Kjeller* Oslo Trondheim Bergen Bodø Vardø )
+cities=( Longyearbyen Mehamn Hammerfest "Vardø " "Sørkjosen " "Tromsø " Karasjok Svanhovd Kautokeino Harstad Svolvær Bodø "Mo i Rana" Brønnøysund Snåsa Trondheim Hitra Molde Runde Dombås Drevsjø Førde Hamar Hol Bergen Kjeller* Oslo Vinje Halden* Stavern Stavanger Kilsund Lista )
 
 URL='http://radnett.nrpa.no/radnett.xml'
 DIR='/tmp/rad'
@@ -42,20 +43,21 @@ echo "  --------------------------"
 
 [[ ! -s $FILE ]] && { echo "No data!"; exit 1; }
 
-for city in ${cities[@]}; do
+#for city in ${cities[@]}; do
+for ((i = 0; i < ${#cities[@]}; i++)); do
   # Check if city contains a reactor
   reactor='  '
-  [[ "x$( echo ${city} | grep -c '*' )" == "x1" ]] && \
+  [[ "x$( echo ${cities[$i]} | grep -c '*' )" == "x1" ]] && \
   {
-	reactor=${reactor_symbol};
-	city=$( echo ${city} | tr -d '*' );
+    reactor=${reactor_symbol};
+    cities[$i]=$( echo ${cities[$i]} | tr -d '*' );
   }
 
   # Parse citys data
-  line=$( grep -si -R3 ${city} $FILE |tail -n1|cut -d '>' -f 2|cut -d '<' -f 1 )
+  line=$( grep -si -R3 ${cities[$i]} $FILE |tail -n1|cut -d '>' -f 2|cut -d '<' -f 1 )
   [[ "x${line}" == "x" ]] && \
   {
-    printf "%-16b" "  ${city}"
+    printf "%-16b" "  ${cities[$i]}"
     echo -e "   no data"
     continue;
   }
@@ -69,8 +71,9 @@ for city in ${cities[@]}; do
 
   # Print resulting line
   echo -en "${reactor}"
-  printf "%-16b" "${city}"
+  printf "%-16b" "${cities[$i]}"
   echo -e "${format}${line}${normal} µSv/h ${danger}"
+
 done
 
 exit 0
